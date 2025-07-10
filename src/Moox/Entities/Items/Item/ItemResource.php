@@ -2,13 +2,6 @@
 
 namespace Moox\Item\Moox\Entities\Items\Item;
 
-use Filament\Schemas\Schema;
-use Filament\Schemas\Components\Grid;
-use Filament\Schemas\Components\Section;
-use Moox\Item\Moox\Entities\Items\Item\Pages\ListItems;
-use Moox\Item\Moox\Entities\Items\Item\Pages\CreateItem;
-use Moox\Item\Moox\Entities\Items\Item\Pages\EditItem;
-use Moox\Item\Moox\Entities\Items\Item\Pages\ViewItem;
 use Camya\Filament\Forms\Components\TitleWithSlugInput;
 use Filament\Forms\Components\ColorPicker;
 use Filament\Forms\Components\DateTimePicker;
@@ -20,6 +13,9 @@ use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Schema;
 use Filament\Tables\Columns\ColorColumn;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
@@ -28,10 +24,14 @@ use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Moox\Clipboard\Forms\Components\CopyableField;
 use Moox\Core\Entities\Items\Item\BaseItemResource;
-use Moox\Core\Forms\Components\CopyableField;
 use Moox\Core\Traits\Taxonomy\HasResourceTaxonomy;
 use Moox\Item\Models\Item;
+use Moox\Item\Moox\Entities\Items\Item\Pages\CreateItem;
+use Moox\Item\Moox\Entities\Items\Item\Pages\EditItem;
+use Moox\Item\Moox\Entities\Items\Item\Pages\ListItems;
+use Moox\Item\Moox\Entities\Items\Item\Pages\ViewItem;
 
 class ItemResource extends BaseItemResource
 {
@@ -39,7 +39,7 @@ class ItemResource extends BaseItemResource
 
     protected static ?string $model = Item::class;
 
-    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function getModelLabel(): string
     {
@@ -73,27 +73,24 @@ class ItemResource extends BaseItemResource
         $schema = [
             Grid::make(2)
                 ->schema([
-                    Grid::make()
+                    Section::make()
                         ->schema([
-                            Section::make()
-                                ->schema([
-                                    TitleWithSlugInput::make(
-                                        fieldTitle: 'title',
-                                        fieldSlug: 'slug',
-                                    ),
-                                    Toggle::make('is_active')
-                                        ->label('Active'),
-                                    RichEditor::make('description')
-                                        ->label('Description'),
-                                    MarkdownEditor::make('content')
-                                        ->label('Content'),
-                                    KeyValue::make('data')
-                                        ->label('Data (JSON)'),
-                                    FileUpload::make('image')
-                                        ->label('Image')
-                                        ->directory('items')
-                                        ->image(),
-                                ]),
+                            // TitleWithSlugInput::make(
+                            //     fieldTitle: 'title',
+                            //     fieldSlug: 'slug',
+                            // ),
+                            Toggle::make('is_active')
+                                ->label('Active'),
+                            RichEditor::make('description')
+                                ->label('Description'),
+                            MarkdownEditor::make('content')
+                                ->label('Content'),
+                            KeyValue::make('data')
+                                ->label('Data (JSON)'),
+                            FileUpload::make('image')
+                                ->label('Image')
+                                ->directory('items')
+                                ->image(),
                             Grid::make(2)
                                 ->schema([
                                     // TODO: exactly same as getFormActions(), why?
@@ -101,7 +98,7 @@ class ItemResource extends BaseItemResource
                                     static::getFooterActions()->columnSpan(1),
                                 ]),
                         ])
-                        ->columnSpan(['lg' => 2]),
+                        ->columnSpan(2),
                     Grid::make()
                         ->schema([
                             Section::make()
@@ -159,9 +156,11 @@ class ItemResource extends BaseItemResource
                                 ])
                                 ->hidden(fn ($record) => $record === null),
                         ])
-                        ->columnSpan(['lg' => 1]),
+                        ->columnSpan(1)
+                        ->columns(1),
                 ])
-                ->columns(['lg' => 3]),
+                ->columns(3)
+                ->columnSpanFull(),
         ];
 
         return $form
