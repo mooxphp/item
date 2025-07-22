@@ -2,7 +2,6 @@
 
 namespace Moox\Item\Moox\Entities\Items\Item;
 
-use Camya\Filament\Forms\Components\TitleWithSlugInput;
 use Filament\Forms\Components\ColorPicker;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\FileUpload;
@@ -32,6 +31,7 @@ use Moox\Item\Moox\Entities\Items\Item\Pages\CreateItem;
 use Moox\Item\Moox\Entities\Items\Item\Pages\EditItem;
 use Moox\Item\Moox\Entities\Items\Item\Pages\ListItems;
 use Moox\Item\Moox\Entities\Items\Item\Pages\ViewItem;
+use Moox\Slug\Forms\Components\TitleWithSlugInput;
 
 class ItemResource extends BaseItemResource
 {
@@ -75,10 +75,10 @@ class ItemResource extends BaseItemResource
                 ->schema([
                     Section::make()
                         ->schema([
-                            // TitleWithSlugInput::make(
-                            //     fieldTitle: 'title',
-                            //     fieldSlug: 'slug',
-                            // ),
+                            TitleWithSlugInput::make(
+                                fieldTitle: 'title',
+                                fieldSlug: 'slug',
+                            ),
                             Toggle::make('is_active')
                                 ->label('Active'),
                             RichEditor::make('description')
